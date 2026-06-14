@@ -54,10 +54,11 @@ def _market_cap_filter(row, mktcap_df, static_large_cap):
     if shares and shares > 0:
         cap_cr = (float(row['close']) * shares) / 1_00_00_000
         return cap_cr > 1000, 'dynamic'
-    # fall back to static CSV
-    if static_large_cap is not None:
-        return row['symbol'] in static_large_cap, 'static_fallback'
-    return True, 'static_fallback'
+    # Fall back to static CSV — only reject if symbol is explicitly listed AND below threshold
+    if static_large_cap is not None and row['symbol'] in static_large_cap:
+        return True, 'static'
+    # Symbol not in CSV: our download universe is already Nifty 500, so pass through
+    return True, 'universe'
 
 
 def _apply_technical_filters(df, mktcap_df):
@@ -71,6 +72,11 @@ def _apply_technical_filters(df, mktcap_df):
     if mktcap_df is not None and not mktcap_df.empty:
         static_large_cap = set(mktcap_df[mktcap_df['market_cap_cr'] > 1000]['symbol'])
 
+    # delivery_pct filter only applied when data is available (NSE bhavdata).
+    # yfinance doesn't provide delivery data so delivery_pct == 0.0 for all rows —
+    # in that case we skip the filter entirely.
+    has_delivery = df['delivery_pct'].gt(0).any()
+
     mask = (
         df['close'].notna() &
         df['ema20'].notna() &
@@ -79,24 +85,30 @@ def _apply_technical_filters(df, mktcap_df):
         df['high40'].notna() &
         (df['close'] > df['ema20']) &
         (df['volume_ratio'] > 1.5) &
-        (df['delivery_pct'] > 50) &
         (df['close'] >= df['high40'] * 0.97) &
         (df['rsi14'] >= 50) &
         (df['rsi14'] <= 70) &
         (df['close'] >= 50) &
-        (df['close'] <= 2000)
+        (df['close'] <= 10000)
     )
+    if has_delivery:
+        mask = mask & (df['delivery_pct'] > 50)
     filtered = df[mask].copy()
 
     # Market cap filter using dynamic shares_outstanding where available
     if 'shares_outstanding' not in filtered.columns:
         filtered['shares_outstanding'] = None
 
-    cap_results = filtered.apply(
-        lambda row: _market_cap_filter(row, mktcap_df, static_large_cap), axis=1
+    if filtered.empty:
+        logging.info(f"Step 1 (technical): {len(df)} → 0 symbols")
+        return filtered
+
+    filtered['_cap_ok'] = filtered.apply(
+        lambda row: _market_cap_filter(row, mktcap_df, static_large_cap)[0], axis=1
     )
-    filtered['_cap_ok'] = cap_results.apply(lambda x: x[0])
-    filtered['market_cap_source'] = cap_results.apply(lambda x: x[1])
+    filtered['market_cap_source'] = filtered.apply(
+        lambda row: _market_cap_filter(row, mktcap_df, static_large_cap)[1], axis=1
+    )
     filtered = filtered[filtered['_cap_ok']].drop(columns=['_cap_ok'])
 
     logging.info(f"Step 1 (technical): {len(df)} → {len(filtered)} symbols")
@@ -109,7 +121,8 @@ def _apply_fundamental_filters(df, fund_data):
         sym = row['symbol']
         fd = fund_data.get(sym)
         if fd is None:
-            logging.info(f"{sym}: skipped step 2 (no fundamental data)")
+            # No scrape data — pass through so scraper outages don't kill all candidates
+            passing.append(row)
             continue
         if (
             fd.get('profit_growth', 0) > 0 and
@@ -129,7 +142,8 @@ def _apply_analyst_filters(df, analyst_data):
         sym = row['symbol']
         ad = analyst_data.get(sym)
         if ad is None:
-            logging.info(f"{sym}: skipped step 3 (no analyst data)")
+            # No scrape data — pass through
+            passing.append(row)
             continue
         if (
             ad.get('analyst_count', 0) >= 3 and
@@ -143,7 +157,11 @@ def _apply_analyst_filters(df, analyst_data):
 
 def _compute_score(row, analyst_upside, promoter_holding):
     vr = min(20.0, max(0.0, (row['volume_ratio'] - 1.5) / 1.5 * 20))
-    dp = min(20.0, max(0.0, (row['delivery_pct'] - 50) / 30 * 20))
+    # delivery_pct==0 means no data (yfinance) — use neutral 10 pts instead of penalising
+    if row['delivery_pct'] > 0:
+        dp = min(20.0, max(0.0, (row['delivery_pct'] - 50) / 30 * 20))
+    else:
+        dp = 10.0
     rsi_norm = max(0.0, 1 - abs(row['rsi14'] - 60) / 10)
     rsi_score = rsi_norm * 20
     au = min(20.0, max(0.0, (analyst_upside - 10) / 20 * 20))

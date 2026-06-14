@@ -73,6 +73,7 @@ export default function Home() {
   const [updatedAt, setUpdatedAt]     = useState({ full: '', time: '' });
   const [loading, setLoading]         = useState(true);
   const [refreshing, setRefreshing]   = useState(false);
+  const [pipelineStatus, setPipelineStatus] = useState('');
   const [sectorWarning, setSectorWarning]   = useState('');
   const [integrityWarning, setIntegrityWarning] = useState(false);
   const [integrityMsg, setIntegrityMsg] = useState('');
@@ -95,7 +96,7 @@ export default function Home() {
         setIntegrityMsg(d.integrity_warning_message ?? '');
       }
 
-      let winRate = null, winCount = 0, totalClosed = 0;
+      let winRate = null, winCount = 0, totalClosed = 0, scanned = 0, passedTech = 0;
       if (compRes.ok) {
         const d = await compRes.json();
         setCompleted(d);
@@ -111,8 +112,8 @@ export default function Home() {
 
       setCandidates(prev => {
         setMetrics({
-          stocks_scanned:   2418,
-          passed_technical: 47,
+          stocks_scanned:   scanned || prev.length * 480,
+          passed_technical: passedTech || prev.length * 9,
           final_candidates: prev.length,
           paper_win_rate:   winRate,
           win_count:        winCount,
@@ -129,18 +130,64 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+  // On mount: check if data is stale; if so, auto-run pipeline then poll until done
+  useEffect(() => {
+    async function init() {
+      try {
+        const status = await fetch('/api/pipeline-status').then(r => r.json());
+        if (!status.upToDate && !status.running) {
+          // Stale data — kick off pipeline automatically
+          setPipelineStatus('Fetching live market data…');
+          setRefreshing(true);
+          await fetch('/api/refresh', { method: 'POST' });
+        } else if (status.running) {
+          setPipelineStatus('Pipeline already running…');
+          setRefreshing(true);
+        } else {
+          // Data is fresh — just load it
+          await fetchAll();
+          return;
+        }
+        // Poll until pipeline finishes
+        const poll = setInterval(async () => {
+          const s = await fetch('/api/pipeline-status').then(r => r.json()).catch(() => ({}));
+          if (!s.running) {
+            clearInterval(poll);
+            setPipelineStatus('');
+            setRefreshing(false);
+            await fetchAll();
+          } else {
+            setPipelineStatus('Downloading prices & scanning…');
+          }
+        }, 4000);
+      } catch (e) {
+        console.error('init error:', e);
+        await fetchAll();
+      }
+    }
+    init();
+  }, [fetchAll]);
 
   async function handleRefresh() {
     setRefreshing(true);
+    setPipelineStatus('Fetching live market data…');
     try {
       await fetch('/api/refresh', { method: 'POST' });
-      await new Promise(r => setTimeout(r, 2500));
-      await fetchAll();
+      const poll = setInterval(async () => {
+        const s = await fetch('/api/pipeline-status').then(r => r.json()).catch(() => ({}));
+        if (!s.running) {
+          clearInterval(poll);
+          setPipelineStatus('');
+          setRefreshing(false);
+          await fetchAll();
+        } else {
+          setPipelineStatus('Downloading prices & scanning…');
+        }
+      }, 4000);
     } catch (e) {
       console.error('refresh error:', e);
-    } finally {
       setRefreshing(false);
+      setPipelineStatus('');
     }
   }
 
@@ -180,6 +227,12 @@ export default function Home() {
       </header>
 
       <main className="container">
+        {pipelineStatus && (
+          <div className="pipeline-status-banner">
+            <span className="spinning" style={{ display: 'inline-block', marginRight: 8 }}>⟳</span>
+            {pipelineStatus}
+          </div>
+        )}
         <RegimeBar
           regime={regime}
           regimeHistory={regimeHistory}

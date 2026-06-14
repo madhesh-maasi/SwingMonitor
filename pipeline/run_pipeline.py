@@ -43,18 +43,24 @@ def compute_regime(nifty_close, ema20, breadth_pct):
 
 def upsert_regime(conn, today_df, breadth_pct):
     today = date.today().isoformat()
+
+    # Use the most recent Nifty 50 close available (works on weekends / holidays)
     nifty_row = conn.execute(
-        "SELECT close FROM ohlcv_history WHERE symbol = 'NIFTY 50' AND date = ? LIMIT 1",
-        (today,)
+        "SELECT close FROM ohlcv_history WHERE symbol = 'NIFTY 50' ORDER BY date DESC LIMIT 1"
     ).fetchone()
+    nifty_close = nifty_row[0] if nifty_row else 24000.0
 
-    if nifty_row:
-        nifty_close = nifty_row[0]
-    else:
+    # Compute Nifty EMA20 from actual Nifty history
+    nifty_hist = conn.execute(
+        "SELECT close FROM ohlcv_history WHERE symbol = 'NIFTY 50' ORDER BY date DESC LIMIT 25"
+    ).fetchall()
+    if len(nifty_hist) >= 5:
         import pandas as pd
-        nifty_close = float(today_df['close'].median()) if not today_df.empty else 24000.0
+        closes = pd.Series([r[0] for r in reversed(nifty_hist)])
+        nifty_ema20 = float(closes.ewm(span=20, adjust=False).mean().iloc[-1])
+    else:
+        nifty_ema20 = nifty_close * 0.99
 
-    nifty_ema20 = float(today_df['ema20'].median()) if not today_df.empty else nifty_close * 0.99
     regime = compute_regime(nifty_close, nifty_ema20, breadth_pct)
 
     conn.execute("""
@@ -67,6 +73,8 @@ def upsert_regime(conn, today_df, breadth_pct):
 
 
 def log_candidates(candidates, conn, today):
+    # Clear today's entries so live data replaces any seeded/stale rows
+    conn.execute("DELETE FROM candidates_log WHERE date = ?", (today,))
     for c in candidates:
         conn.execute("""
             INSERT OR REPLACE INTO candidates_log
@@ -205,8 +213,19 @@ def build_data_json(conn, regime, candidates, total_scanned, passed_tech,
     return data
 
 
+FLAG_FILE = Path(__file__).parent / 'running.flag'
+
+
+def _clear_flag():
+    try:
+        FLAG_FILE.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+
 def run():
     setup_logging()
+    FLAG_FILE.touch()          # mark as running (also set by refresh.js)
     today = date.today().isoformat()
     logging.info(f"=== Pipeline run started: {today} ===")
 
@@ -285,6 +304,7 @@ def run():
         raise
     finally:
         conn.close()
+        _clear_flag()
 
 
 if __name__ == '__main__':
