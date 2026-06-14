@@ -1,0 +1,411 @@
+{
+  "updated_at": "15:03",
+  "regime": {
+    "date": "2026-06-14",
+    "nifty_close": 439.0,
+    "ema20": 453.24,
+    "breadth_pct": 60.0,
+    "regime": "CAUTION"
+  },
+  "metrics": {
+    "stocks_scanned": 5,
+    "passed_technical": 0,
+    "final_candidates": 0,
+    "paper_win_rate": 70.0
+  },
+  "candidates": [],
+  "paper_trades": [
+    {
+      "id": 1,
+      "symbol": "KPITTECH",
+      "entry_date": "2026-05-29",
+      "entry_price": 1620.0,
+      "target_price": 1814.4,
+      "stop_price": 1522.8,
+      "current_price": 1738.71
+    },
+    {
+      "id": 2,
+      "symbol": "BHEL",
+      "entry_date": "2026-06-05",
+      "entry_price": 272.0,
+      "target_price": 304.64,
+      "stop_price": 255.68,
+      "current_price": 293.94
+    },
+    {
+      "id": 3,
+      "symbol": "TATASTEEL",
+      "entry_date": "2026-05-22",
+      "entry_price": 158.0,
+      "target_price": 176.96,
+      "stop_price": 148.52,
+      "current_price": 177.0
+    },
+    {
+      "id": 14,
+      "symbol": "KPITTECH",
+      "entry_date": "2026-05-29",
+      "entry_price": 1620.0,
+      "target_price": 1814.4,
+      "stop_price": 1522.8,
+      "current_price": 1738.71
+    },
+    {
+      "id": 15,
+      "symbol": "BHEL",
+      "entry_date": "2026-06-05",
+      "entry_price": 272.0,
+      "target_price": 304.64,
+      "stop_price": 255.68,
+      "current_price": 293.94
+    },
+    {
+      "id": 16,
+      "symbol": "TATASTEEL",
+      "entry_date": "2026-05-22",
+      "entry_price": 158.0,
+      "target_price": 176.96,
+      "stop_price": 148.52,
+      "current_price": 177.0
+    },
+    {
+      "id": 27,
+      "symbol": "KPITTECH",
+      "entry_date": "2026-05-29",
+      "entry_price": 1620.0,
+      "target_price": 1814.4,
+      "stop_price": 1522.8,
+      "current_price": 1738.71
+    },
+    {
+      "id": 28,
+      "symbol": "BHEL",
+      "entry_date": "2026-06-05",
+      "entry_price": 272.0,
+      "target_price": 304.64,
+      "stop_price": 255.68,
+      "current_price": 293.94
+    },
+    {
+      "id": 29,
+      "symbol": "TATASTEEL",
+      "entry_date": "2026-05-22",
+      "entry_price": 158.0,
+      "target_price": 176.96,
+      "stop_price": 148.52,
+      "current_price": 177.0
+    }
+  ],
+  "completed": {
+    "summary": {
+      "win_rate": 70.0,
+      "avg_gain": 11.07,
+      "avg_loss": -6.0,
+      "expectancy": 5.95,
+      "total_trades": 30
+    },
+    "trades": [
+      {
+        "symbol": "INFY",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1450.0,
+        "exit_price": 1624.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 18
+      },
+      {
+        "symbol": "WIPRO",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 485.0,
+        "exit_price": 543.2,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 15
+      },
+      {
+        "symbol": "RELIANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 2800.0,
+        "exit_price": 3136.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 20
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1580.0,
+        "exit_price": 1769.6,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 19
+      },
+      {
+        "symbol": "BAJFINANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 6800.0,
+        "exit_price": 7616.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 21
+      },
+      {
+        "symbol": "TITAN",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 3200.0,
+        "exit_price": 3584.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 16
+      },
+      {
+        "symbol": "AXISBANK",
+        "entry_date": "2026-05-05",
+        "exit_date": "2026-06-12",
+        "entry_price": 1050.0,
+        "exit_price": 987.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 8
+      },
+      {
+        "symbol": "NTPC",
+        "entry_date": "2026-05-08",
+        "exit_date": "2026-06-12",
+        "entry_price": 330.0,
+        "exit_price": 310.2,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 12
+      },
+      {
+        "symbol": "MARUTI",
+        "entry_date": "2026-05-13",
+        "exit_date": "2026-06-12",
+        "entry_price": 11000.0,
+        "exit_price": 10340.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 5
+      },
+      {
+        "symbol": "ONGC",
+        "entry_date": "2026-05-14",
+        "exit_date": "2026-06-12",
+        "entry_price": 260.0,
+        "exit_price": 274.3,
+        "pnl_pct": 5.5,
+        "outcome": "expired",
+        "days_held": 21
+      },
+      {
+        "symbol": "INFY",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1450.0,
+        "exit_price": 1624.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 18
+      },
+      {
+        "symbol": "WIPRO",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 485.0,
+        "exit_price": 543.2,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 15
+      },
+      {
+        "symbol": "RELIANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 2800.0,
+        "exit_price": 3136.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 20
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1580.0,
+        "exit_price": 1769.6,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 19
+      },
+      {
+        "symbol": "BAJFINANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 6800.0,
+        "exit_price": 7616.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 21
+      },
+      {
+        "symbol": "TITAN",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 3200.0,
+        "exit_price": 3584.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 16
+      },
+      {
+        "symbol": "AXISBANK",
+        "entry_date": "2026-05-05",
+        "exit_date": "2026-06-12",
+        "entry_price": 1050.0,
+        "exit_price": 987.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 8
+      },
+      {
+        "symbol": "NTPC",
+        "entry_date": "2026-05-08",
+        "exit_date": "2026-06-12",
+        "entry_price": 330.0,
+        "exit_price": 310.2,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 12
+      },
+      {
+        "symbol": "MARUTI",
+        "entry_date": "2026-05-13",
+        "exit_date": "2026-06-12",
+        "entry_price": 11000.0,
+        "exit_price": 10340.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 5
+      },
+      {
+        "symbol": "ONGC",
+        "entry_date": "2026-05-14",
+        "exit_date": "2026-06-12",
+        "entry_price": 260.0,
+        "exit_price": 274.3,
+        "pnl_pct": 5.5,
+        "outcome": "expired",
+        "days_held": 21
+      },
+      {
+        "symbol": "INFY",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1450.0,
+        "exit_price": 1624.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 18
+      },
+      {
+        "symbol": "WIPRO",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 485.0,
+        "exit_price": 543.2,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 15
+      },
+      {
+        "symbol": "RELIANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 2800.0,
+        "exit_price": 3136.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 20
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 1580.0,
+        "exit_price": 1769.6,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 19
+      },
+      {
+        "symbol": "BAJFINANCE",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 6800.0,
+        "exit_price": 7616.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 21
+      },
+      {
+        "symbol": "TITAN",
+        "entry_date": "2026-05-04",
+        "exit_date": "2026-06-12",
+        "entry_price": 3200.0,
+        "exit_price": 3584.0,
+        "pnl_pct": 12.0,
+        "outcome": "target_hit",
+        "days_held": 16
+      },
+      {
+        "symbol": "AXISBANK",
+        "entry_date": "2026-05-05",
+        "exit_date": "2026-06-12",
+        "entry_price": 1050.0,
+        "exit_price": 987.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 8
+      },
+      {
+        "symbol": "NTPC",
+        "entry_date": "2026-05-08",
+        "exit_date": "2026-06-12",
+        "entry_price": 330.0,
+        "exit_price": 310.2,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 12
+      },
+      {
+        "symbol": "MARUTI",
+        "entry_date": "2026-05-13",
+        "exit_date": "2026-06-12",
+        "entry_price": 11000.0,
+        "exit_price": 10340.0,
+        "pnl_pct": -6.0,
+        "outcome": "stop_hit",
+        "days_held": 5
+      },
+      {
+        "symbol": "ONGC",
+        "entry_date": "2026-05-14",
+        "exit_date": "2026-06-12",
+        "entry_price": 260.0,
+        "exit_price": 274.3,
+        "pnl_pct": 5.5,
+        "outcome": "expired",
+        "days_held": 21
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+
+# Pipeline logs (keep structure, ignore logs)
+pipeline/logs/*.log
+pipeline/logs/scraper_errors.log
+
+# SQLite database (local only, not deployed)
+data/history.db
+
+# Node
+dashboard/node_modules/
+dashboard/.next/
+dashboard/.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel

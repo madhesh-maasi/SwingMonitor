@@ -1,0 +1,8 @@
+{
+  "name": "SwingMonitor",
+  "rootDirectory": "dashboard",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install --include=optional",
+  "framework": "nextjs"
+}

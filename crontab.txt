@@ -1,0 +1,4 @@
+# Swing Monitor — daily pipeline at 4:30 PM IST (11:00 UTC), Mon–Fri only
+# To install: run `crontab -e`, paste the line below (edit /YOUR/PATH), save and exit.
+
+30 11 * * 1-5 cd /YOUR/PATH/swing-monitor && python3 pipeline/run_pipeline.py >> pipeline/logs/cron.log 2>&1
