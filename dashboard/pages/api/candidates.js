@@ -24,9 +24,17 @@ export default function handler(req, res) {
     const jsonPath = path.join(process.cwd(), 'public', 'data.json');
     if (fs.existsSync(jsonPath)) {
       const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-      return res.status(200).json({ candidates: data.candidates ?? [], regime: data.regime });
+      return res.status(200).json({
+        candidates: data.candidates ?? [],
+        regime: data.regime,
+        regime_history: data.regime_history ?? [],
+        sector_warning: data.sector_warning ?? false,
+        sector_warning_message: data.sector_warning_message ?? '',
+        data_integrity_warning: data.data_integrity_warning ?? false,
+        integrity_warning_message: data.integrity_warning_message ?? '',
+      });
     }
-    return res.status(200).json({ candidates: [], regime: null });
+    return res.status(200).json({ candidates: [], regime: null, regime_history: [] });
   }
 
   try {
@@ -83,8 +91,12 @@ export default function handler(req, res) {
       'SELECT * FROM market_regime ORDER BY date DESC LIMIT 1'
     ).get() ?? null;
 
+    const regime_history = db.prepare(
+      'SELECT date, regime, breadth_pct, nifty_close FROM market_regime ORDER BY date DESC LIMIT 30'
+    ).all().reverse();
+
     db.close();
-    res.status(200).json({ candidates, regime, date: latestDate });
+    res.status(200).json({ candidates, regime, regime_history, date: latestDate });
   } catch (err) {
     if (db) db.close();
     console.error('candidates API error:', err);

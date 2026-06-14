@@ -42,6 +42,14 @@ def compute_indicators(conn):
         grp['avg_vol20'] = grp['volume'].rolling(20).mean()
         grp['high40'] = grp['high'].rolling(40).max()
         grp['volume_ratio'] = grp['volume'] / grp['avg_vol20'].replace(0, float('nan'))
+        # ATR14 via Wilder smoothing (alpha = 1/14)
+        prev_close = grp['close'].shift(1)
+        tr = pd.concat([
+            grp['high'] - grp['low'],
+            (grp['high'] - prev_close).abs(),
+            (grp['low']  - prev_close).abs(),
+        ], axis=1).max(axis=1)
+        grp['atr14'] = tr.ewm(alpha=1/14, adjust=False).mean()
         last = grp.iloc[-1].copy()
         last['symbol'] = symbol
         # Keep last 7 closes for sparkline
@@ -82,6 +90,6 @@ if __name__ == '__main__':
     df, breadth = run()
     if not df.empty:
         print(f"Indicators computed for {len(df)} symbols  |  Breadth: {breadth:.1f}%")
-        print(df[['symbol', 'close', 'ema20', 'rsi14', 'volume_ratio']].head(10).to_string())
+        print(df[['symbol', 'close', 'ema20', 'rsi14', 'volume_ratio', 'atr14']].head(10).to_string())
     else:
         print("No data — run seed_demo.py first")

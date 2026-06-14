@@ -1,5 +1,5 @@
 {
-  "updated_at": "17:29",
+  "updated_at": "18:30",
   "regime": {
     "date": "2026-06-14",
     "nifty_close": 24312.0,
@@ -7,12 +7,198 @@
     "breadth_pct": 68.0,
     "regime": "GO"
   },
+  "regime_history": [
+    {
+      "date": "2026-05-04",
+      "regime": "AVOID",
+      "breadth_pct": 28.0,
+      "nifty_close": 23772.0
+    },
+    {
+      "date": "2026-05-05",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 23817.0
+    },
+    {
+      "date": "2026-05-06",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 23862.0
+    },
+    {
+      "date": "2026-05-07",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 23907.0
+    },
+    {
+      "date": "2026-05-08",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 23952.0
+    },
+    {
+      "date": "2026-05-11",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 23997.0
+    },
+    {
+      "date": "2026-05-12",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24042.0
+    },
+    {
+      "date": "2026-05-13",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24087.0
+    },
+    {
+      "date": "2026-05-14",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 24132.0
+    },
+    {
+      "date": "2026-05-15",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24177.0
+    },
+    {
+      "date": "2026-05-18",
+      "regime": "AVOID",
+      "breadth_pct": 28.0,
+      "nifty_close": 24222.0
+    },
+    {
+      "date": "2026-05-19",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24267.0
+    },
+    {
+      "date": "2026-05-20",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 24312.0
+    },
+    {
+      "date": "2026-05-21",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24357.0
+    },
+    {
+      "date": "2026-05-22",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24402.0
+    },
+    {
+      "date": "2026-05-25",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24447.0
+    },
+    {
+      "date": "2026-05-26",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24492.0
+    },
+    {
+      "date": "2026-05-27",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24537.0
+    },
+    {
+      "date": "2026-05-28",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 24582.0
+    },
+    {
+      "date": "2026-05-29",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24627.0
+    },
+    {
+      "date": "2026-06-01",
+      "regime": "AVOID",
+      "breadth_pct": 28.0,
+      "nifty_close": 24672.0
+    },
+    {
+      "date": "2026-06-02",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24717.0
+    },
+    {
+      "date": "2026-06-03",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 24762.0
+    },
+    {
+      "date": "2026-06-04",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24807.0
+    },
+    {
+      "date": "2026-06-05",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24852.0
+    },
+    {
+      "date": "2026-06-08",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24897.0
+    },
+    {
+      "date": "2026-06-09",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24942.0
+    },
+    {
+      "date": "2026-06-10",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 24987.0
+    },
+    {
+      "date": "2026-06-11",
+      "regime": "CAUTION",
+      "breadth_pct": 48.0,
+      "nifty_close": 25032.0
+    },
+    {
+      "date": "2026-06-12",
+      "regime": "GO",
+      "breadth_pct": 68.0,
+      "nifty_close": 25077.0
+    }
+  ],
   "metrics": {
     "stocks_scanned": 2418,
     "passed_technical": 47,
     "final_candidates": 5,
-    "paper_win_rate": 70.0
+    "paper_win_rate": 75.0
   },
+  "sector_warning": false,
+  "sector_warning_message": "",
+  "data_integrity_warning": false,
+  "integrity_warning_message": "",
   "candidates": [
     {
       "symbol": "KPITTECH",
@@ -29,8 +215,9 @@
       "debt_equity": 0.21,
       "promoter_holding": 72.1,
       "close": 1738.71,
-      "target_price": 1947.36,
-      "stop_price": 1634.39,
+      "atr14": 31.3,
+      "target_price": 1832.61,
+      "stop_price": 1691.76,
       "sparkline": [
         1821.73,
         1805.54,
@@ -39,7 +226,13 @@
         1782.11,
         1746.81,
         1738.71
-      ]
+      ],
+      "day_change_pct": -0.46,
+      "analyst_count": 18,
+      "cached_data": false,
+      "cache_age_days": null,
+      "shares_outstanding": 7700000,
+      "market_cap_source": "dynamic"
     },
     {
       "symbol": "BHEL",
@@ -56,8 +249,9 @@
       "debt_equity": 0.88,
       "promoter_holding": 54.6,
       "close": 293.94,
-      "target_price": 329.21,
-      "stop_price": 276.3,
+      "atr14": 7.05,
+      "target_price": 315.09,
+      "stop_price": 283.37,
       "sparkline": [
         276.42,
         282.41,
@@ -66,7 +260,13 @@
         303.67,
         292.99,
         293.94
-      ]
+      ],
+      "day_change_pct": 0.32,
+      "analyst_count": 12,
+      "cached_data": false,
+      "cache_age_days": null,
+      "shares_outstanding": 35000000,
+      "market_cap_source": "dynamic"
     },
     {
       "symbol": "HDFCBANK",
@@ -83,8 +283,9 @@
       "debt_equity": 0.65,
       "promoter_holding": 48.3,
       "close": 1383.12,
-      "target_price": 1549.09,
-      "stop_price": 1300.13,
+      "atr14": 17.98,
+      "target_price": 1437.06,
+      "stop_price": 1356.15,
       "sparkline": [
         1382.7,
         1383.99,
@@ -93,7 +294,13 @@
         1383.8,
         1351.96,
         1383.12
-      ]
+      ],
+      "day_change_pct": 2.3,
+      "analyst_count": 9,
+      "cached_data": false,
+      "cache_age_days": null,
+      "shares_outstanding": 76000000,
+      "market_cap_source": "dynamic"
     },
     {
       "symbol": "TATASTEEL",
@@ -110,8 +317,9 @@
       "debt_equity": 1.12,
       "promoter_holding": 45.2,
       "close": 177.0,
-      "target_price": 198.24,
-      "stop_price": 166.38,
+      "atr14": 3.89,
+      "target_price": 188.67,
+      "stop_price": 171.16,
       "sparkline": [
         160.47,
         165.73,
@@ -120,7 +328,13 @@
         176.25,
         177.74,
         177.0
-      ]
+      ],
+      "day_change_pct": -0.42,
+      "analyst_count": 14,
+      "cached_data": false,
+      "cache_age_days": null,
+      "shares_outstanding": 123000000,
+      "market_cap_source": "dynamic"
     },
     {
       "symbol": "COALINDIA",
@@ -137,8 +351,9 @@
       "debt_equity": 0.04,
       "promoter_holding": 52.0,
       "close": 439.0,
-      "target_price": 491.68,
-      "stop_price": 412.66,
+      "atr14": 7.02,
+      "target_price": 460.06,
+      "stop_price": 428.47,
       "sparkline": [
         469.01,
         463.6,
@@ -147,527 +362,212 @@
         446.57,
         439.98,
         439.0
-      ]
+      ],
+      "day_change_pct": -0.22,
+      "analyst_count": 11,
+      "cached_data": false,
+      "cache_age_days": null,
+      "shares_outstanding": 61500000,
+      "market_cap_source": "dynamic"
     }
   ],
   "paper_trades": [
     {
-      "id": 1,
+      "id": 85,
       "symbol": "KPITTECH",
       "entry_date": "2026-05-29",
       "entry_price": 1620.0,
-      "target_price": 1814.4,
-      "stop_price": 1522.8,
-      "current_price": 1738.71
+      "target_price": 1713.89,
+      "stop_price": 1573.05,
+      "current_price": 1738.71,
+      "stop_moved_to_breakeven": false
     },
     {
-      "id": 2,
+      "id": 86,
       "symbol": "BHEL",
       "entry_date": "2026-06-05",
       "entry_price": 272.0,
-      "target_price": 304.64,
-      "stop_price": 255.68,
-      "current_price": 293.94
+      "target_price": 293.16,
+      "stop_price": 261.42,
+      "current_price": 293.94,
+      "stop_moved_to_breakeven": false
     },
     {
-      "id": 3,
+      "id": 87,
       "symbol": "TATASTEEL",
       "entry_date": "2026-05-22",
       "entry_price": 158.0,
-      "target_price": 176.96,
-      "stop_price": 148.52,
-      "current_price": 177.0
-    },
-    {
-      "id": 14,
-      "symbol": "KPITTECH",
-      "entry_date": "2026-05-29",
-      "entry_price": 1620.0,
-      "target_price": 1814.4,
-      "stop_price": 1522.8,
-      "current_price": 1738.71
-    },
-    {
-      "id": 15,
-      "symbol": "BHEL",
-      "entry_date": "2026-06-05",
-      "entry_price": 272.0,
-      "target_price": 304.64,
-      "stop_price": 255.68,
-      "current_price": 293.94
-    },
-    {
-      "id": 16,
-      "symbol": "TATASTEEL",
-      "entry_date": "2026-05-22",
-      "entry_price": 158.0,
-      "target_price": 176.96,
-      "stop_price": 148.52,
-      "current_price": 177.0
-    },
-    {
-      "id": 27,
-      "symbol": "KPITTECH",
-      "entry_date": "2026-05-29",
-      "entry_price": 1620.0,
-      "target_price": 1814.4,
-      "stop_price": 1522.8,
-      "current_price": 1738.71
-    },
-    {
-      "id": 28,
-      "symbol": "BHEL",
-      "entry_date": "2026-06-05",
-      "entry_price": 272.0,
-      "target_price": 304.64,
-      "stop_price": 255.68,
-      "current_price": 293.94
-    },
-    {
-      "id": 29,
-      "symbol": "TATASTEEL",
-      "entry_date": "2026-05-22",
-      "entry_price": 158.0,
-      "target_price": 176.96,
-      "stop_price": 148.52,
-      "current_price": 177.0
-    },
-    {
-      "id": 40,
-      "symbol": "KPITTECH",
-      "entry_date": "2026-05-29",
-      "entry_price": 1620.0,
-      "target_price": 1814.4,
-      "stop_price": 1522.8,
-      "current_price": 1738.71
-    },
-    {
-      "id": 41,
-      "symbol": "BHEL",
-      "entry_date": "2026-06-05",
-      "entry_price": 272.0,
-      "target_price": 304.64,
-      "stop_price": 255.68,
-      "current_price": 293.94
-    },
-    {
-      "id": 42,
-      "symbol": "TATASTEEL",
-      "entry_date": "2026-05-22",
-      "entry_price": 158.0,
-      "target_price": 176.96,
-      "stop_price": 148.52,
-      "current_price": 177.0
+      "target_price": 169.68,
+      "stop_price": 158.0,
+      "current_price": 177.0,
+      "stop_moved_to_breakeven": true
     }
   ],
   "completed": {
     "summary": {
-      "win_rate": 70.0,
-      "avg_gain": 11.07,
-      "avg_loss": -6.0,
-      "expectancy": 5.95,
-      "total_trades": 40
+      "win_rate": 75.0,
+      "avg_gain": 5.41,
+      "avg_loss": -2.7,
+      "expectancy": 3.38,
+      "total_trades": 12,
+      "gap_rejections": 1
+    },
+    "weekly_summary": {
+      "trades_closed_this_week": 2,
+      "week_win_rate": 100.0,
+      "best_trade": {
+        "symbol": "SBIN",
+        "pnl_pct": 5.4
+      },
+      "worst_trade": {
+        "symbol": "SBIN",
+        "pnl_pct": 5.4
+      },
+      "gap_rejections_this_week": 0
     },
     "trades": [
       {
-        "symbol": "INFY",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1450.0,
-        "exit_price": 1624.0,
-        "pnl_pct": 12.0,
+        "symbol": "SBIN",
+        "entry_date": "2026-06-09",
+        "exit_date": "2026-06-09",
+        "entry_price": 825.0,
+        "exit_price": 869.55,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 18
+        "days_held": 3,
+        "gap_rejected_pct": null
+      },
+      {
+        "symbol": "ICICIBANK",
+        "entry_date": "2026-06-10",
+        "exit_date": "2026-06-09",
+        "entry_price": 1250.0,
+        "exit_price": 1317.5,
+        "pnl_pct": 5.4,
+        "outcome": "target_hit",
+        "days_held": 2,
+        "gap_rejected_pct": null
+      },
+      {
+        "symbol": "HDFCBANK",
+        "entry_date": "2026-06-02",
+        "exit_date": "2026-06-03",
+        "entry_price": 1715.0,
+        "exit_price": 1757.87,
+        "pnl_pct": null,
+        "outcome": "gap_rejected",
+        "days_held": 1,
+        "gap_rejected_pct": 2.5
+      },
+      {
+        "symbol": "INFY",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
+        "entry_price": 1450.0,
+        "exit_price": 1528.3,
+        "pnl_pct": 5.4,
+        "outcome": "target_hit",
+        "days_held": 18,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "WIPRO",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
         "entry_price": 485.0,
-        "exit_price": 543.2,
-        "pnl_pct": 12.0,
+        "exit_price": 511.19,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 15
+        "days_held": 15,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "RELIANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
         "entry_price": 2800.0,
-        "exit_price": 3136.0,
-        "pnl_pct": 12.0,
+        "exit_price": 2951.2,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 20
+        "days_held": 20,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "SUNPHARMA",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
         "entry_price": 1580.0,
-        "exit_price": 1769.6,
-        "pnl_pct": 12.0,
+        "exit_price": 1665.32,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 19
+        "days_held": 19,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "BAJFINANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
         "entry_price": 6800.0,
-        "exit_price": 7616.0,
-        "pnl_pct": 12.0,
+        "exit_price": 7167.2,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 21
+        "days_held": 21,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "TITAN",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
+        "entry_date": "2026-04-27",
+        "exit_date": "2026-05-29",
         "entry_price": 3200.0,
-        "exit_price": 3584.0,
-        "pnl_pct": 12.0,
+        "exit_price": 3372.8,
+        "pnl_pct": 5.4,
         "outcome": "target_hit",
-        "days_held": 16
+        "days_held": 16,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "AXISBANK",
         "entry_date": "2026-05-05",
-        "exit_date": "2026-06-12",
+        "exit_date": "2026-05-29",
         "entry_price": 1050.0,
-        "exit_price": 987.0,
-        "pnl_pct": -6.0,
+        "exit_price": 1021.65,
+        "pnl_pct": -2.7,
         "outcome": "stop_hit",
-        "days_held": 8
+        "days_held": 8,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "NTPC",
         "entry_date": "2026-05-08",
-        "exit_date": "2026-06-12",
+        "exit_date": "2026-05-29",
         "entry_price": 330.0,
-        "exit_price": 310.2,
-        "pnl_pct": -6.0,
+        "exit_price": 321.09,
+        "pnl_pct": -2.7,
         "outcome": "stop_hit",
-        "days_held": 12
+        "days_held": 12,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "MARUTI",
         "entry_date": "2026-05-13",
-        "exit_date": "2026-06-12",
+        "exit_date": "2026-05-29",
         "entry_price": 11000.0,
-        "exit_price": 10340.0,
-        "pnl_pct": -6.0,
+        "exit_price": 10703.0,
+        "pnl_pct": -2.7,
         "outcome": "stop_hit",
-        "days_held": 5
+        "days_held": 5,
+        "gap_rejected_pct": null
       },
       {
         "symbol": "ONGC",
         "entry_date": "2026-05-14",
-        "exit_date": "2026-06-12",
+        "exit_date": "2026-05-29",
         "entry_price": 260.0,
         "exit_price": 274.3,
         "pnl_pct": 5.5,
         "outcome": "expired",
-        "days_held": 21
-      },
-      {
-        "symbol": "INFY",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1450.0,
-        "exit_price": 1624.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 18
-      },
-      {
-        "symbol": "WIPRO",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 485.0,
-        "exit_price": 543.2,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 15
-      },
-      {
-        "symbol": "RELIANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 2800.0,
-        "exit_price": 3136.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 20
-      },
-      {
-        "symbol": "SUNPHARMA",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1580.0,
-        "exit_price": 1769.6,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 19
-      },
-      {
-        "symbol": "BAJFINANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 6800.0,
-        "exit_price": 7616.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 21
-      },
-      {
-        "symbol": "TITAN",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 3200.0,
-        "exit_price": 3584.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 16
-      },
-      {
-        "symbol": "AXISBANK",
-        "entry_date": "2026-05-05",
-        "exit_date": "2026-06-12",
-        "entry_price": 1050.0,
-        "exit_price": 987.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 8
-      },
-      {
-        "symbol": "NTPC",
-        "entry_date": "2026-05-08",
-        "exit_date": "2026-06-12",
-        "entry_price": 330.0,
-        "exit_price": 310.2,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 12
-      },
-      {
-        "symbol": "MARUTI",
-        "entry_date": "2026-05-13",
-        "exit_date": "2026-06-12",
-        "entry_price": 11000.0,
-        "exit_price": 10340.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 5
-      },
-      {
-        "symbol": "ONGC",
-        "entry_date": "2026-05-14",
-        "exit_date": "2026-06-12",
-        "entry_price": 260.0,
-        "exit_price": 274.3,
-        "pnl_pct": 5.5,
-        "outcome": "expired",
-        "days_held": 21
-      },
-      {
-        "symbol": "INFY",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1450.0,
-        "exit_price": 1624.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 18
-      },
-      {
-        "symbol": "WIPRO",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 485.0,
-        "exit_price": 543.2,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 15
-      },
-      {
-        "symbol": "RELIANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 2800.0,
-        "exit_price": 3136.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 20
-      },
-      {
-        "symbol": "SUNPHARMA",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1580.0,
-        "exit_price": 1769.6,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 19
-      },
-      {
-        "symbol": "BAJFINANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 6800.0,
-        "exit_price": 7616.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 21
-      },
-      {
-        "symbol": "TITAN",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 3200.0,
-        "exit_price": 3584.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 16
-      },
-      {
-        "symbol": "AXISBANK",
-        "entry_date": "2026-05-05",
-        "exit_date": "2026-06-12",
-        "entry_price": 1050.0,
-        "exit_price": 987.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 8
-      },
-      {
-        "symbol": "NTPC",
-        "entry_date": "2026-05-08",
-        "exit_date": "2026-06-12",
-        "entry_price": 330.0,
-        "exit_price": 310.2,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 12
-      },
-      {
-        "symbol": "MARUTI",
-        "entry_date": "2026-05-13",
-        "exit_date": "2026-06-12",
-        "entry_price": 11000.0,
-        "exit_price": 10340.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 5
-      },
-      {
-        "symbol": "ONGC",
-        "entry_date": "2026-05-14",
-        "exit_date": "2026-06-12",
-        "entry_price": 260.0,
-        "exit_price": 274.3,
-        "pnl_pct": 5.5,
-        "outcome": "expired",
-        "days_held": 21
-      },
-      {
-        "symbol": "INFY",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1450.0,
-        "exit_price": 1624.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 18
-      },
-      {
-        "symbol": "WIPRO",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 485.0,
-        "exit_price": 543.2,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 15
-      },
-      {
-        "symbol": "RELIANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 2800.0,
-        "exit_price": 3136.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 20
-      },
-      {
-        "symbol": "SUNPHARMA",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 1580.0,
-        "exit_price": 1769.6,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 19
-      },
-      {
-        "symbol": "BAJFINANCE",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 6800.0,
-        "exit_price": 7616.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 21
-      },
-      {
-        "symbol": "TITAN",
-        "entry_date": "2026-05-04",
-        "exit_date": "2026-06-12",
-        "entry_price": 3200.0,
-        "exit_price": 3584.0,
-        "pnl_pct": 12.0,
-        "outcome": "target_hit",
-        "days_held": 16
-      },
-      {
-        "symbol": "AXISBANK",
-        "entry_date": "2026-05-05",
-        "exit_date": "2026-06-12",
-        "entry_price": 1050.0,
-        "exit_price": 987.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 8
-      },
-      {
-        "symbol": "NTPC",
-        "entry_date": "2026-05-08",
-        "exit_date": "2026-06-12",
-        "entry_price": 330.0,
-        "exit_price": 310.2,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 12
-      },
-      {
-        "symbol": "MARUTI",
-        "entry_date": "2026-05-13",
-        "exit_date": "2026-06-12",
-        "entry_price": 11000.0,
-        "exit_price": 10340.0,
-        "pnl_pct": -6.0,
-        "outcome": "stop_hit",
-        "days_held": 5
-      },
-      {
-        "symbol": "ONGC",
-        "entry_date": "2026-05-14",
-        "exit_date": "2026-06-12",
-        "entry_price": 260.0,
-        "exit_price": 274.3,
-        "pnl_pct": 5.5,
-        "outcome": "expired",
-        "days_held": 21
+        "days_held": 21,
+        "gap_rejected_pct": null
       }
     ]
   }

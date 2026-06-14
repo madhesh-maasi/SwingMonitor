@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-/* Static sector + cap-tier lookup */
 const SECTOR_INFO = {
   KPITTECH:  { sector: 'IT',              cap: 'Mid cap' },
   BHEL:      { sector: 'Capital goods',   cap: 'Large cap' },
@@ -54,10 +53,7 @@ function PriceChange({ pct }) {
   const isUp = pct >= 0;
   return (
     <div className="price-change-row">
-      <div
-        className="price-change-dot"
-        style={{ background: isUp ? 'var(--green)' : 'var(--red)' }}
-      />
+      <div className="price-change-dot" style={{ background: isUp ? 'var(--green)' : 'var(--red)' }} />
       <span className={`price-change-pct ${isUp ? 'up' : 'down'}`}>
         {isUp ? '+' : ''}{pct.toFixed(1)}%
       </span>
@@ -92,20 +88,23 @@ function consensusPill(consensus, analystCount) {
   return <span className={`pill ${cls}`}>{text}</span>;
 }
 
+function fmt(n, decimals = 0) {
+  return n?.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
 export default function CandidateCard({ candidate, isTop, onPaperTrade }) {
   const [adding, setAdding] = useState(false);
-  const [added, setAdded] = useState(false);
+  const [added, setAdded]   = useState(false);
   const c = candidate;
 
   const info = SECTOR_INFO[c.symbol] ?? { sector: c.sector ?? 'Equity', cap: '' };
   const sectorLabel = info.cap ? `${info.sector} — ${info.cap}` : info.sector;
 
-  // All scanner candidates passed close > EMA20 at scan time — sparkline always bullish green.
-  // Day change (red/green square) independently shows today's price move.
   const sparklineIsUp = true;
-  const isUp = (c.day_change_pct ?? 0) >= 0;
   const targetPct = c.close ? ((c.target_price - c.close) / c.close * 100) : 0;
   const stopPct   = c.close ? ((c.stop_price  - c.close) / c.close * 100) : 0;
+  const gapSkip   = c.close ? Math.round(c.close * 1.02 * 100) / 100 : 0;
+  const entrySkip = c.close ? Math.round(c.close * 1.015 * 100) / 100 : 0;
   const kiteUrl   = `https://kite.zerodha.com/chart/ext/ciq/NSE/${c.symbol}/EQ`;
 
   async function handleAddTrade() {
@@ -136,31 +135,21 @@ export default function CandidateCard({ candidate, isTop, onPaperTrade }) {
           {isTop && <span className="top-pick-badge">Top pick</span>}
         </div>
         <div className="sym-sector">{sectorLabel}</div>
-        <Sparkline data={c.sparkline} isUp={sparklineIsUp} />
+        <div className="sparkline-wrap">
+          <Sparkline data={c.sparkline} isUp={sparklineIsUp} />
+        </div>
       </div>
 
       {/* Col 2: Price + change */}
       <div className="candidate-col">
-        <div className="price-main">₹{c.close?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+        <div className="price-main">₹{fmt(c.close, 2)}</div>
         <PriceChange pct={c.day_change_pct} />
       </div>
 
       {/* Col 3: Score + RSI bars */}
       <div className="candidate-col">
-        <ScoreBar
-          label="Score"
-          value={c.score}
-          display={`${c.score}/100`}
-          max={100}
-          colorClass="bar-green"
-        />
-        <ScoreBar
-          label="RSI"
-          value={c.rsi}
-          display={c.rsi?.toFixed(0)}
-          max={100}
-          colorClass="bar-blue"
-        />
+        <ScoreBar label="Score" value={c.score} display={`${c.score}/100`} max={100} colorClass="bar-green" />
+        <ScoreBar label="RSI" value={c.rsi} display={c.rsi?.toFixed(0)} max={100} colorClass="bar-blue" />
       </div>
 
       {/* Col 4: Badges */}
@@ -169,18 +158,39 @@ export default function CandidateCard({ candidate, isTop, onPaperTrade }) {
           <span className="pill pill-blue">Vol {c.volume_ratio?.toFixed(1)}× avg</span>
           <span className="pill pill-blue">Del {c.delivery_pct?.toFixed(0)}%</span>
           {consensusPill(c.analyst_consensus, c.analyst_count ?? 0)}
+          {c.cached_data && (
+            <span className="pill pill-amber">
+              Fundamentals {c.cache_age_days ?? '?'}d old
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Col 5: Target + stop */}
+      {/* Col 5: Target + stop + ATR + gap skip + entry guidance */}
       <div className="candidate-col">
         <div className="tp-group">
-          <div className="tp-price">₹{c.target_price?.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
+          <div className="tp-price">₹{fmt(c.target_price, 0)}</div>
           <div className="tp-pct">Target +{targetPct.toFixed(1)}%</div>
         </div>
         <div className="tp-group">
-          <div className="tp-price red">₹{c.stop_price?.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</div>
+          <div className="tp-price red">₹{fmt(c.stop_price, 0)}</div>
           <div className="tp-pct red">Stop {stopPct.toFixed(1)}%</div>
+        </div>
+        {c.atr14 != null && (
+          <div className="atr-badge">ATR ₹{c.atr14.toFixed(0)}</div>
+        )}
+        <div className="gap-skip-line">
+          Gap skip above ₹{fmt(gapSkip, 0)}
+        </div>
+        <div className="entry-guidance">
+          <div className="entry-guidance-desktop">
+            <span className="eg-label">Entry window:</span> 10:00 – 10:30 AM IST
+            <br />
+            <span className="eg-label">Skip if open &gt;</span> ₹{fmt(entrySkip, 0)}
+          </div>
+          <div className="entry-guidance-mobile">
+            Entry: 10–10:30 AM · Skip &gt;₹{fmt(entrySkip, 0)}
+          </div>
         </div>
       </div>
 

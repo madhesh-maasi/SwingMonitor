@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import sqlite3
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -36,7 +37,7 @@ STATIC_SECTORS = {
 
 def _load_market_caps():
     if not MKTCAP_CSV.exists():
-        logging.warning("market_caps.csv not found — skipping market cap filter")
+        logging.warning("market_caps.csv not found — skipping static market cap filter")
         return None
     try:
         df = pd.read_csv(MKTCAP_CSV)
@@ -47,12 +48,28 @@ def _load_market_caps():
         return None
 
 
+def _market_cap_filter(row, mktcap_df, static_large_cap):
+    """Return True if symbol passes market cap filter (>1000 Cr)."""
+    shares = row.get('shares_outstanding')
+    if shares and shares > 0:
+        cap_cr = (float(row['close']) * shares) / 1_00_00_000
+        return cap_cr > 1000, 'dynamic'
+    # fall back to static CSV
+    if static_large_cap is not None:
+        return row['symbol'] in static_large_cap, 'static_fallback'
+    return True, 'static_fallback'
+
+
 def _apply_technical_filters(df, mktcap_df):
     required = ['close', 'ema20', 'volume_ratio', 'delivery_pct', 'high40', 'rsi14']
     for col in required:
         if col not in df.columns:
             logging.error(f"Missing column: {col}")
             return pd.DataFrame()
+
+    static_large_cap = None
+    if mktcap_df is not None and not mktcap_df.empty:
+        static_large_cap = set(mktcap_df[mktcap_df['market_cap_cr'] > 1000]['symbol'])
 
     mask = (
         df['close'].notna() &
@@ -71,9 +88,16 @@ def _apply_technical_filters(df, mktcap_df):
     )
     filtered = df[mask].copy()
 
-    if mktcap_df is not None and not mktcap_df.empty:
-        large_cap = set(mktcap_df[mktcap_df['market_cap_cr'] > 1000]['symbol'])
-        filtered = filtered[filtered['symbol'].isin(large_cap)]
+    # Market cap filter using dynamic shares_outstanding where available
+    if 'shares_outstanding' not in filtered.columns:
+        filtered['shares_outstanding'] = None
+
+    cap_results = filtered.apply(
+        lambda row: _market_cap_filter(row, mktcap_df, static_large_cap), axis=1
+    )
+    filtered['_cap_ok'] = cap_results.apply(lambda x: x[0])
+    filtered['market_cap_source'] = cap_results.apply(lambda x: x[1])
+    filtered = filtered[filtered['_cap_ok']].drop(columns=['_cap_ok'])
 
     logging.info(f"Step 1 (technical): {len(df)} → {len(filtered)} symbols")
     return filtered
@@ -127,11 +151,22 @@ def _compute_score(row, analyst_upside, promoter_holding):
     return int(round(vr + dp + rsi_score + au + ph))
 
 
-async def _fetch_fundamentals(symbols):
+def _sector_warning(candidates):
+    from collections import Counter
+    sectors = [c.get('sector', 'Equity') for c in candidates]
+    counts = Counter(sectors)
+    for sector, n in counts.most_common(1):
+        if n >= 3:
+            return True, f"{sector} appears {n} times in today's candidates"
+    return False, ''
+
+
+async def _fetch_fundamentals(symbols, conn):
     results = {}
+    today = datetime.now().strftime('%Y-%m-%d')
     for sym in symbols:
         try:
-            data = await screener.scrape(sym)
+            data = await screener.scrape(sym, conn=conn, today=today)
             if data:
                 results[sym] = data
         except Exception as e:
@@ -140,11 +175,12 @@ async def _fetch_fundamentals(symbols):
     return results
 
 
-async def _fetch_analyst(symbols):
+async def _fetch_analyst(symbols, conn):
     results = {}
+    today = datetime.now().strftime('%Y-%m-%d')
     for sym in symbols:
         try:
-            data = await trendlyne.scrape(sym)
+            data = await trendlyne.scrape(sym, conn=conn, today=today)
             if data:
                 results[sym] = data
         except Exception as e:
@@ -156,7 +192,7 @@ async def _fetch_analyst(symbols):
 def run(today_df, breadth_pct, conn):
     if today_df.empty:
         logging.warning("No indicator data — skipping scan")
-        return []
+        return [], 0, 0
 
     mktcap_df = _load_market_caps()
     step1 = _apply_technical_filters(today_df, mktcap_df)
@@ -167,7 +203,7 @@ def run(today_df, breadth_pct, conn):
         return [], total_scanned, 0
 
     symbols_step1 = step1['symbol'].tolist()
-    fund_data = asyncio.run(_fetch_fundamentals(symbols_step1))
+    fund_data = asyncio.run(_fetch_fundamentals(symbols_step1, conn))
     step2 = _apply_fundamental_filters(step1, fund_data)
 
     if step2.empty:
@@ -175,7 +211,7 @@ def run(today_df, breadth_pct, conn):
         return [], total_scanned, len(step1)
 
     symbols_step2 = step2['symbol'].tolist()
-    analyst_data = asyncio.run(_fetch_analyst(symbols_step2))
+    analyst_data = asyncio.run(_fetch_analyst(symbols_step2, conn))
     step3 = _apply_analyst_filters(step2, analyst_data)
 
     if step3.empty:
@@ -195,30 +231,46 @@ def run(today_df, breadth_pct, conn):
         if hasattr(sparkline, 'tolist'):
             sparkline = sparkline.tolist()
 
+        atr14 = float(row.get('atr14') or row['close'] * 0.02)
+        close = float(row['close'])
+
         candidates.append({
             'symbol': sym,
-            'sector': STATIC_SECTORS.get(sym, 'Equity'),
+            'sector': STATIC_SECTORS.get(sym, row.get('sector', 'Equity')),
             'score': score,
             'rsi': round(float(row['rsi14']), 1),
             'volume_ratio': round(float(row['volume_ratio']), 2),
             'delivery_pct': round(float(row['delivery_pct']), 1),
             'ema20': round(float(row['ema20']), 2),
             'high40': round(float(row['high40']), 2),
-            'close': round(float(row['close']), 2),
+            'close': round(close, 2),
+            'atr14': round(atr14, 2),
             'analyst_consensus': ad.get('consensus', 'Buy'),
             'analyst_upside': round(analyst_upside, 1),
             'profit_growth': round(fd.get('profit_growth', 0), 1),
             'debt_equity': round(fd.get('debt_equity', 0), 2),
             'promoter_holding': round(promoter_holding, 1),
             'sparkline': sparkline,
-            'target_price': round(float(row['close']) * 1.12, 2),
-            'stop_price': round(float(row['close']) * 0.94, 2),
+            'stop_price': round(close - 1.5 * atr14, 2),
+            'target_price': round(close + 3.0 * atr14, 2),
+            'cached_data': ad.get('cached', False) or fd.get('cached', False),
+            'cache_age_days': max(
+                ad.get('cache_age_days', 0) or 0,
+                fd.get('cache_age_days', 0) or 0,
+            ) or None,
+            'shares_outstanding': fd.get('shares_outstanding'),
+            'market_cap_source': row.get('market_cap_source', 'dynamic'),
         })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
     top5 = candidates[:5]
+
+    sw, sw_msg = _sector_warning(top5)
     logging.info(f"Final candidates: {[c['symbol'] for c in top5]}")
-    return top5, total_scanned, len(step1)
+    if sw:
+        logging.warning(f"Sector concentration: {sw_msg}")
+
+    return top5, total_scanned, len(step1), sw, sw_msg
 
 
 if __name__ == '__main__':

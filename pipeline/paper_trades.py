@@ -5,6 +5,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 DB_PATH = BASE_DIR / 'data' / 'history.db'
+LOG_DIR = Path(__file__).parent / 'logs'
 
 
 def _today():
@@ -17,30 +18,75 @@ def _days_between(date1_str, date2_str):
     return (d2 - d1).days
 
 
+def _log_gap(symbol, gap_pct, today):
+    LOG_DIR.mkdir(exist_ok=True)
+    ts = datetime.now().isoformat(timespec='seconds')
+    path = LOG_DIR / 'gap_rejections.log'
+    with open(path, 'a') as f:
+        f.write(f"{ts} | {today} | {symbol} | gap_pct={gap_pct:+.2f}%\n")
+
+
+def _log_breakeven(symbol, entry_price, today):
+    LOG_DIR.mkdir(exist_ok=True)
+    ts = datetime.now().isoformat(timespec='seconds')
+    path = LOG_DIR / 'stop_updates.log'
+    with open(path, 'a') as f:
+        f.write(f"{ts} | {today} | {symbol} | Stop moved to breakeven ₹{entry_price:.2f}\n")
+
+
 def update_open_trades(conn):
     today = _today()
     open_trades = conn.execute(
-        "SELECT id, symbol, entry_date, entry_price, target_price, stop_price FROM paper_trades WHERE status = 'open'"
+        """SELECT id, symbol, entry_date, entry_price, target_price, stop_price,
+                  stop_moved_to_breakeven
+           FROM paper_trades WHERE status = 'open'"""
     ).fetchall()
 
     for trade in open_trades:
-        tid, symbol, entry_date, entry_price, target_price, stop_price = trade
+        tid, symbol, entry_date, entry_price, target_price, stop_price, stop_at_be = trade
         days_held = _days_between(entry_date, today)
 
         row = conn.execute(
-            "SELECT high, low, close FROM ohlcv_history WHERE symbol = ? AND date = ?",
+            "SELECT open, high, low, close FROM ohlcv_history WHERE symbol = ? AND date = ?",
             (symbol, today)
         ).fetchone()
 
         if row is None:
-            # No today's data yet — skip
             continue
 
-        high, low, close = row
+        open_price, high, low, close = row
         status = 'open'
         exit_price = None
         exit_date = None
+        gap_rejected_pct = None
 
+        # Gap filter: on first trading day after entry, reject if gap > 2%
+        if days_held == 1 and open_price and open_price > entry_price * 1.02:
+            gap_pct = (open_price - entry_price) / entry_price * 100
+            status = 'gap_rejected'
+            exit_date = today
+            exit_price = open_price
+            gap_rejected_pct = round(gap_pct, 2)
+            _log_gap(symbol, gap_pct, today)
+            logging.info(f"Trade {tid} ({symbol}): gap_rejected, open={open_price:.2f} vs entry={entry_price:.2f} (+{gap_pct:.2f}%)")
+            conn.execute("""
+                UPDATE paper_trades
+                SET status = ?, exit_date = ?, exit_price = ?, gap_rejected_pct = ?, days_held = ?
+                WHERE id = ?
+            """, (status, exit_date, exit_price, gap_rejected_pct, days_held, tid))
+            continue
+
+        # Breakeven stop: move stop to entry if price >= entry * 1.03
+        if close >= entry_price * 1.03 and stop_price < entry_price and not stop_at_be:
+            conn.execute("""
+                UPDATE paper_trades SET stop_price = ?, stop_moved_to_breakeven = 1
+                WHERE id = ? AND status = 'open'
+            """, (entry_price, tid))
+            stop_price = entry_price
+            _log_breakeven(symbol, entry_price, today)
+            logging.info(f"Trade {tid} ({symbol}): stop moved to breakeven ₹{entry_price:.2f}")
+
+        # Target / stop / expiry
         if high >= target_price:
             status = 'target_hit'
             exit_price = target_price
@@ -70,7 +116,6 @@ def insert_new_trades(candidates, conn):
     today = _today()
     for c in candidates:
         symbol = c['symbol']
-        # Only insert if no open trade already exists for this symbol
         existing = conn.execute(
             "SELECT id FROM paper_trades WHERE symbol = ? AND status = 'open'",
             (symbol,)
@@ -80,7 +125,8 @@ def insert_new_trades(candidates, conn):
             continue
 
         conn.execute("""
-            INSERT INTO paper_trades (symbol, entry_date, entry_price, target_price, stop_price, status)
+            INSERT INTO paper_trades
+            (symbol, entry_date, entry_price, target_price, stop_price, status)
             VALUES (?, ?, ?, ?, ?, 'open')
         """, (symbol, today, c['close'], c['target_price'], c['stop_price']))
         logging.info(f"Inserted paper trade: {symbol} @ {c['close']} | T:{c['target_price']} S:{c['stop_price']}")

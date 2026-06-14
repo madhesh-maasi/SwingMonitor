@@ -6,7 +6,7 @@ import CandidateCard from '../components/CandidateCard';
 import PaperTradeCard from '../components/PaperTradeCard';
 import CompletedTable from '../components/CompletedTable';
 
-const TABS = ['Today\'s candidates', 'Paper trades', 'Completed'];
+const TABS = ["Today's candidates", 'Paper trades', 'Completed'];
 
 function CandlestickIcon() {
   return (
@@ -43,23 +43,39 @@ function nowLabel() {
   const d = new Date();
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mm = String(d.getMinutes()).padStart(2, '0');
-  const ampm = d.getHours() >= 12 ? 'PM' : 'AM';
-  const h12 = d.getHours() % 12 || 12;
-  return `Updated ${h12}:${mm} ${ampm} IST · ${days[d.getDay()]} ${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  const h12    = d.getHours() % 12 || 12;
+  const mm     = String(d.getMinutes()).padStart(2, '0');
+  const ampm   = d.getHours() >= 12 ? 'PM' : 'AM';
+  return {
+    full: `Updated ${h12}:${mm} ${ampm} IST · ${days[d.getDay()]} ${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]} ${d.getFullYear()}`,
+    time: `${h12}:${mm} ${ampm} IST`,
+  };
+}
+
+function SectorWarning({ message }) {
+  if (!message) return null;
+  return (
+    <div className="sector-warning-notice">
+      <span className="sw-icon">⚠</span>
+      <span>{message} — Consider skipping 1 to reduce sector concentration.</span>
+    </div>
+  );
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab]   = useState(0);
-  const [candidates, setCandidates] = useState([]);
-  const [regime, setRegime]         = useState(null);
-  const [metrics, setMetrics]       = useState(null);
+  const [activeTab, setActiveTab]     = useState(0);
+  const [candidates, setCandidates]   = useState([]);
+  const [regime, setRegime]           = useState(null);
+  const [regimeHistory, setRegimeHistory] = useState([]);
+  const [metrics, setMetrics]         = useState(null);
   const [paperTrades, setPaperTrades] = useState([]);
-  const [completed, setCompleted]   = useState(null);
-  const [updatedAt, setUpdatedAt]   = useState('');
-  const [loading, setLoading]       = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [completed, setCompleted]     = useState(null);
+  const [updatedAt, setUpdatedAt]     = useState({ full: '', time: '' });
+  const [loading, setLoading]         = useState(true);
+  const [refreshing, setRefreshing]   = useState(false);
+  const [sectorWarning, setSectorWarning]   = useState('');
+  const [integrityWarning, setIntegrityWarning] = useState(false);
+  const [integrityMsg, setIntegrityMsg] = useState('');
 
   const fetchAll = useCallback(async () => {
     try {
@@ -73,14 +89,18 @@ export default function Home() {
         const d = await candRes.json();
         setCandidates(d.candidates ?? []);
         setRegime(d.regime ?? null);
+        setRegimeHistory(d.regime_history ?? []);
+        setSectorWarning(d.sector_warning ? d.sector_warning_message : '');
+        setIntegrityWarning(!!d.data_integrity_warning);
+        setIntegrityMsg(d.integrity_warning_message ?? '');
       }
 
-      let winCount = 0, totalClosed = 0, winRate = null;
+      let winRate = null, winCount = 0, totalClosed = 0;
       if (compRes.ok) {
         const d = await compRes.json();
         setCompleted(d);
-        winRate    = d?.summary?.win_rate;
-        winCount   = d?.summary ? Math.round((d.summary.win_rate / 100) * d.summary.total_trades) : 0;
+        winRate     = d?.summary?.win_rate;
+        winCount    = d?.summary ? Math.round((d.summary.win_rate / 100) * d.summary.total_trades) : 0;
         totalClosed = d?.summary?.total_trades ?? 0;
       }
 
@@ -89,15 +109,14 @@ export default function Home() {
         setPaperTrades(d.trades ?? []);
       }
 
-      // Rebuild metrics after both API calls
       setCandidates(prev => {
         setMetrics({
-          stocks_scanned:    2418,
-          passed_technical:  47,
-          final_candidates:  prev.length,
-          paper_win_rate:    winRate,
-          win_count:         winCount,
-          total_closed:      totalClosed,
+          stocks_scanned:   2418,
+          passed_technical: 47,
+          final_candidates: prev.length,
+          paper_win_rate:   winRate,
+          win_count:        winCount,
+          total_closed:     totalClosed,
         });
         return prev;
       });
@@ -147,16 +166,26 @@ export default function Home() {
           Swing<span className="accent">Monitor</span>
         </div>
         <div className="topbar-right">
-          {updatedAt && <span className="badge">{updatedAt}</span>}
-          <button className="btn btn-outline" onClick={handleRefresh} disabled={refreshing}>
+          {updatedAt.full && (
+            <>
+              <span className="badge badge-date">{updatedAt.full}</span>
+              <span className="badge badge-time">{updatedAt.time}</span>
+            </>
+          )}
+          <button className="btn btn-outline refresh-btn" onClick={handleRefresh} disabled={refreshing}>
             <RefreshIcon spinning={refreshing} />
-            {refreshing ? 'Running…' : 'Refresh ↗'}
+            <span className="refresh-label">{refreshing ? 'Running…' : 'Refresh'}</span>
           </button>
         </div>
       </header>
 
       <main className="container">
-        <RegimeBar regime={regime} />
+        <RegimeBar
+          regime={regime}
+          regimeHistory={regimeHistory}
+          dataIntegrityWarning={integrityWarning}
+          integrityWarningMessage={integrityMsg}
+        />
         <MetricCards metrics={metrics} />
 
         {/* Pill tabs */}
@@ -188,6 +217,8 @@ export default function Home() {
                   {candidates.length} candidate{candidates.length !== 1 ? 's' : ''} · ranked by composite score
                 </div>
 
+                {sectorWarning && <SectorWarning message={sectorWarning} />}
+
                 {candidates.length === 0 ? (
                   <div className="empty-state">
                     No candidates today.{' '}
@@ -204,7 +235,6 @@ export default function Home() {
                   ))
                 )}
 
-                {/* Active paper trades preview below candidates */}
                 {openTrades.length > 0 && (
                   <>
                     <div className="section-header" style={{ marginTop: 32 }}>
